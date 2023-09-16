@@ -33,7 +33,7 @@ def getClientDF(query_string, user):
     df = queryData.to_dataframe()
     return df
     
-def updateClientPDF(df):
+def updateClientPDF(df, target_dir):
 
     ANNOT_KEY = '/Annots'
     ANNOT_NAME_KEY = '/Name'
@@ -42,14 +42,11 @@ def updateClientPDF(df):
     ANNOT_RECT_KEY = 'Rect'
     SUBTYPE_KEY = '/Subtype'
     WIDGET_SUBTYPE_KEY = '/Widget'
-    
-    
     client_dict=df.set_index('name').to_dict()
-    name_list = client_df["name"].unique.tolist()
     
     for name in client_dict.keys():
         individual_dict = client_dict[name]
-        template_pdf = pdfrw.PdfReader(templatePDF).Root.AcroForm.update(
+        template_pdf = pdfrw.PdfReader("template_path/template.pdf").Root.AcroForm.update(
                         pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true'))
                     )
         
@@ -62,7 +59,7 @@ def updateClientPDF(df):
                         annotKey = annotation[ANNOT_FIELD_KEY][1:-1]
                         if annotKey in individual_dict.keys():
                             annotation.update(
-                                pdfrw.PdfDict(V="{}".format(individual_dict[key]))
+                                pdfrw.PdfDict(V="{}".format(individual_dict[annotKey]))
                             )       
                             annotation.update(pdfrw.PdfDict(AP=""))
                             
@@ -73,8 +70,9 @@ def updateClientPDF(df):
                                 pdfrw.PdfDict(V='{}'.format(individual_dict["name"]))
                             )
                             annotation.update(pdfrw.PdfDict(AP=""))
-                            
-        pdfrw.PdfWriter().write(f"{target_dir}\\{individual_dict["Name"]}_Review.pdf", template_pdf)
+        name_ = individual_dict["Name"]
+        output = os.path.join(target_dir, f"{name_}_Review.pdf")
+        pdfrw.PdfWriter().write(output, template_pdf)
 
 
 def main():
