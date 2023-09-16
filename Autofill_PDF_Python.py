@@ -23,7 +23,7 @@ def approveClient():
         if _2ndTry[0].lower() == "y":
             try:
                 unqId_2 = input("Please enter access code: ")
-                creds = jdict[unqId_2][credentials]
+                creds = jdict[unqId_2]["credentials"]
                 target_dir = jdict[unqId_2]["clientReviewPath"]
             except:
                 print("Invalid access code. Try again later.")
