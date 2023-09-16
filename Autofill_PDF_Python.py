@@ -15,24 +15,7 @@ WIDGET_SUBTYPE_KEY = '/Widget'
 
 creds = getCredentials(name, json_path)
 user = bigquery.Client.from_service_account_json(creds)
-qStr = """
-    select
-        name, dob, phoneNum, address,
-        max(case when rn = 1 then acctNum end) as Account_1,
-        max(case when rn = 2 then acctNum end) as Account_2,
-        max(case when rn = 3 then acctNum end) as Account_3,
-        max(case when rn = 4 then acctNum end) as Account_4)
-        from (
-            select
-            name,
-            dob,
-            phoneNum
-            acctNum,
-            row_number() over (partition by name order by acctNum) as rn
-            from client_info) ci
-    group by name
-    order By name;
-"""
+
 def getClientDF(query_string, user):
     queryData = user.query(query_string)
     df = queryData.to_dataframe()
@@ -78,6 +61,27 @@ def updateClientPDF(inCloud=True, input_path, output_path):
     updateClientPDF("C:Automation_Projects")
 
 def main():
+    unqId = input("Please provide your unique access code: ")
+    creds = getCredentials(unqId, json_path)
+    user = bigquery.Client.from_service_account_json(creds)
+    qStr = """
+    select
+        name, dob, phoneNum, address,
+        max(case when rn = 1 then acctNum end) as Account_1,
+        max(case when rn = 2 then acctNum end) as Account_2,
+        max(case when rn = 3 then acctNum end) as Account_3,
+        max(case when rn = 4 then acctNum end) as Account_4)
+        from (
+            select
+            name,
+            dob,
+            phoneNum
+            acctNum,
+            row_number() over (partition by name order by acctNum) as rn
+            from client_info) ci
+    group by name
+    order By name;
+"""
     inCloud = input("Query? yes or no: ")
     inCloudBool = inClound.lower()[0] == "y"
     
