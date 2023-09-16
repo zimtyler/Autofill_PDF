@@ -1,3 +1,6 @@
+# Recently updated this old script. This was originally my first big python project. And while the older version was difficult to read, it saved me so much time.
+# Thought it deserved a make over.
+
 import pdfrw
 import json
 import pandas as pd
@@ -5,6 +8,7 @@ import os
 import sys
 import glob
 from google.cloud import bigquery
+
 
 def approveClient():
     with open("C:sample_dir/advisors.json", "r") as advisors:
@@ -104,4 +108,3 @@ def main():
     
 if __name__ == '__main__':
     main()
-        
