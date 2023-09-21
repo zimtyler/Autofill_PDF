@@ -1,5 +1,10 @@
-# Recently updated this old script. This was originally my first big python project. And while the older version was difficult to read, it saved me so much time.
-# Thought it deserved a make over.
+"""
+Recently updated this old script.
+This was originally my first big python project. 
+And while the older version was difficult to read,
+it saved me so much time.
+Thought it deserved a make over.
+"""
 
 import pdfrw
 import json
